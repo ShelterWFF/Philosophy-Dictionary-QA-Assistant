@@ -113,7 +113,7 @@ if __name__ == "__main__":
             db_wo_his_btn.click(model_center.qa_chain_self_answer, inputs=[msg, chatbot], outputs=[msg, chatbot])
             
         gr.Markdown("""提醒：<br>
-        1. 初始化数据库时间可能较长，请耐心等待。
+        1. 受限于模型性能，效果可能会差些。
         2. 使用中如果出现异常，将会在文本输入框进行展示，请不要惊慌。 <br>
         """)
     gr.close_all()
