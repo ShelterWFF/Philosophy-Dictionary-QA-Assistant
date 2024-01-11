@@ -13,7 +13,7 @@ def get_persist_vectordb(file_path, model_name, persist_directory):
     docs = loader.load_and_split(RecursiveCharacterTextSplitter(chunk_size=300, chunk_overlap=100))
     docs = [doc for doc in docs if doc.metadata['page']>18]
 
-    embeddings = HuggingFaceEmbeddings(model_name=model_name
+    embeddings = HuggingFaceEmbeddings(model_name=model_name)
     vectordb = Chroma.from_documents(
         documents=docs,
         embedding=embeddings,
