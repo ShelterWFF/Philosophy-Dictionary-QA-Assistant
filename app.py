@@ -1,18 +1,29 @@
 from langchain.vectorstores import Chroma
 from langchain.embeddings.huggingface import HuggingFaceEmbeddings
-import os
 from LLM import InternLM_LLM
 from langchain.prompts import PromptTemplate
 from langchain.chains import RetrievalQA
 import gradio as gr
+import pysqlite3
+import sys
+sys.modules["sqlite3"] = sys.modules.pop("pysqlite3")
+import os
+# 设置环境变量
+os.environ['HF_ENDPOINT'] = 'https://hf-mirror.com'
+# 下载模型
+os.system('huggingface-cli download --resume-download BAAI/bge-base-zh --local-dir /home/xlab-app-center/model/bge-base-zh')
+# 将模型导入
+from openxlab.model import download
+download(model_repo='OpenLMLab/InternLM-chat-7b', output='/home/xlab-app-center/model/InternLM-chat-7b')
+
 
 def load_chain():
     # 加载问答链
     # 定义 Embeddings
-    embeddings = HuggingFaceEmbeddings(model_name="/root/data/model/bge-base-zh")
+    embeddings = HuggingFaceEmbeddings(model_name="/home/xlab-app-center/model/bge-base-zh")
 
     # 向量数据库持久化路径
-    persist_directory = '/root/data/class3/data_base/vector_db/chroma'
+    persist_directory = 'data_base/vector_db/chroma'
 
     # 加载数据库
     vectordb = Chroma(
@@ -21,7 +32,7 @@ def load_chain():
     )
 
     # 加载自定义 LLM
-    llm = InternLM_LLM(model_path = "/root/data/model/Shanghai_AI_Laboratory/internlm-chat-7b")
+    llm = InternLM_LLM(model_path = "/home/xlab-app-center/model/InternLM-chat-7b")
 
     # 定义一个 Prompt Template
     template = """作为一名哲学问答助手，你的任务是根据所提供的上下文回答用户问题。要求如下：
